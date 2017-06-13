@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/css/foundation-flex.min.css">
+</head>
+
+<body>
+  <section style="margin-top: 60px;">
+    <div class="row">
+      <div class="column small-12">
+        <h3>Go get them, sales machine! 🎉</h3>
+        <p>Here's the latest at Base:</p>
+        <h4 id="numEmployees"></h4>
+        <ul id="employees"></ul>
+      </div>
+    </div>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
+  <script type='text/javascript'>
+  var publicSpreadsheetUrl = "https://docs.google.com/spreadsheets/d/1myxS5PJio-8V2n7HTgGz9X9L6bDX22LUaKILF4bXMfM/pubhtml";
+
+  function init() {
+    Tabletop.init({
+      key: publicSpreadsheetUrl,
+      callback: showInfo,
+      wanted: ["Employees"],
+      debug: true
+    })
+  }
+
+  function showInfo(data, tabletop) {
+    console.log('Successfully processed!');
+    $("#numEmployees").text(
+      "There are " + tabletop.sheets("Employees").all().length + " people joining Base this week:"
+    );
+    $.each( tabletop.sheets("Employees").all(), function(i, employee) {
+      var li_emp = $("<li><strong>" + employee.name + "</strong>");
+      li_emp.append(" is our newest " + employee.role);
+      li_emp.append(".<br>" + employee.name + " says: " + employee.fact + "!</li>");
+      li_emp.appendTo("#employees");
+    })
+  }
+
+  window.addEventListener('DOMContentLoaded', init)
+  </script>
+</body>
+
+</html>
